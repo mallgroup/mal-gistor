@@ -2,5 +2,8 @@ export function logout ({ commit }) {
   commit('user', '')
   commit('token', '')
 
-  window.location.reload()
+  // reset gist config as well
+  commit('gist/clear', null, {
+    root: true
+  })
 }

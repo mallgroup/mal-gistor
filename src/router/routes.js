@@ -14,8 +14,14 @@ const routes = [
         path: '/gist/:id?',
         component: () => import('pages/Gist.vue'),
         props: true
-      },
-      { name: 'auth', path: '/auth', component: () => import('pages/Auth.vue') }
+      }
+    ]
+  },
+  {
+    path: '/auth',
+    component: () => import('layouts/AuthLayout.vue'),
+    children: [
+      { name: 'auth', path: '', component: () => import('pages/Auth.vue') }
     ]
   }
 ]

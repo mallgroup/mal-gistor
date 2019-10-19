@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col">
-        <p>
+        <p class="text-left">
           Enter your GitHub personal access token. You might found your token on
           <a
             href="https://github.com/settings/tokens"
@@ -28,9 +28,10 @@
       autofocus
     >
       <div class="row">
-        <div class="col-6">
+        <div class="col-12">
           <q-input
             filled
+            autofocus
             v-model="user"
             label="Username"
             :rules="[val => !!val || 'Username is required.']"
@@ -38,18 +39,21 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-6">
+        <div class="col-12">
           <q-input
             filled
             v-model="token"
-            label="Token"
+            label="Personal Access Token"
             :rules="[val => !!val || 'Personal access token is required.']"
           />
         </div>
       </div>
-      <div class="row">
+      <div class="row text-left">
         <div class="col">
-          <q-btn type="submit">Authorize</q-btn>
+          <q-btn
+            type="submit"
+            :disable="!user || !token"
+          >Authorize</q-btn>
         </div>
       </div>
     </q-form>
@@ -91,9 +95,7 @@ export default {
         this.$store.commit('user/token', this.token)
         this.$store.commit('user/user', this.user)
 
-        setTimeout(() => {
-          window.location.reload()
-        }, 500)
+        this.$router.push({ name: 'homepage' })
       } catch (err) {
         if (err) {
           if (err.request.status === 401) {

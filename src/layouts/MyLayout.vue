@@ -12,8 +12,21 @@
         />
 
         <q-toolbar-title>
-          MALL Gist
+          MALL Group Gist
         </q-toolbar-title>
+
+        <a
+            href="http://mallgroup.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="vertical-middle"
+          >
+          <img
+            alt="MALL Group"
+            src="~assets/mallgroup.svg"
+            style="max-width:150px"
+          >
+        </a>
       </q-toolbar>
     </q-header>
 
@@ -182,9 +195,9 @@ export default {
         color: 'positive'
       })
 
-      setTimeout(() => {
-        this.$store.dispatch('user/logout')
-      }, 2000)
+      this.$store.dispatch('user/logout')
+
+      this.$router.push({ name: 'auth' })
     }
   }
 }

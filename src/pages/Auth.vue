@@ -1,8 +1,8 @@
 <template>
-  <q-page
-    class='q-pa-md'
-  >
-    <user-login />
+  <q-page>
+    <div class="fixed-center text-center">
+      <user-login />
+    </div>
   </q-page>
 </template>
 

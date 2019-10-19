@@ -24,3 +24,8 @@ export function remove (state, gist) {
   let items = state.items.filter(item => item.id !== gist.id)
   state.items = items
 }
+
+export function clear (state) {
+  state.items = []
+  state.config = {}
+}

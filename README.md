@@ -1,7 +1,7 @@
 <img src="/src/statics/icons/favicon-128x128.png" alt="logo" width="128" height="128" align="right"
  />
 
-# Mall Gist
+# MALL Group Gist
 Powerful UI for your Gists stored at GitHub.
 
 App available on: https://igist.app
