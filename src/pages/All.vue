@@ -187,6 +187,8 @@ export default {
           })
         }
       }
+
+      this.selected = []
     }
   }
 }

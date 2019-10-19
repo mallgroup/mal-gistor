@@ -3,5 +3,7 @@ export default {
   config: {
     categories: [],
     items: {}
-  }
+  },
+  size: 0,
+  truncated: false
 }

@@ -22,7 +22,7 @@ export function groupByLanguage (state) {
       } else {
         languages[file.language] = {
           language: file.language,
-          count: ++languages[file.language].count
+          count: languages[file.language].count + 1
         }
       }
     }

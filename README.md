@@ -6,9 +6,13 @@ Powerful UI for your Gists stored at GitHub.
 
 App available on https://igist.app
 
-## When to use Gist UI?
- - If you frequently work with GitHub Gists.
- - If you believe that you can save even more time managing Gists efficiently.
+## What does Gist UI offer?
+ - Saving more of your time by managing Gists efficiently.
+ - Syntax highlighting with support for multiple formats.
+ - Statistics regarding to your Gists.
+
+### What we're working on?
+ - Option to organize your Gists with categories.
 
 We're proudly back up by the [largest e-commerce platform](http://www.mallgroup.com) in Western Europe.
 

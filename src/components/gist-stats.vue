@@ -83,7 +83,7 @@ export default {
       return this.$store.getters['gist/groupByLanguage']
     },
     storageFull () {
-      return Math.round(this.$store.state.gist.config.size / 1024) || 0
+      return Math.round(this.$store.state.gist.size / 1024) || 0
     }
   }
 }

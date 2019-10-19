@@ -156,10 +156,11 @@ export default {
 
           this.$store.commit('gist/config', {
             id: configGistId,
-            truncated: response.data.files[configFileName].truncated,
-            size: response.data.files[configFileName].size,
             ...JSON.parse(response.data.files[configFileName].content) // append config from content
           })
+
+          this.$store.commit('gist/size', response.data.files[configFileName].size)
+          this.$store.commit('gist/truncated', response.data.files[configFileName].truncated)
         } catch (error) {
           if (error) {
             console.error(error)
@@ -198,11 +199,12 @@ export default {
           })
 
           let config = JSON.parse(JSON.stringify(this.$store.state.gist.config))
-          config.truncated = response.data.files[configFileName].truncated
-          config.size = response.data.files[configFileName].size
+          config.id = response.data.id
           config.items = items
 
           this.$store.commit('gist/config', config)
+          this.$store.commit('gist/size', response.data.files[configFileName].size)
+          this.$store.commit('gist/truncated', response.data.files[configFileName].truncated)
         } catch (error) {
           if (error) {
             console.error(error)

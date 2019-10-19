@@ -2,6 +2,14 @@ export function config (state, config) {
   state.config = config
 }
 
+export function size (state, size) {
+  state.size = size
+}
+
+export function truncated (state, truncated) {
+  state.truncated = truncated
+}
+
 export function add (state, gist) {
   state.items.push(gist)
 }

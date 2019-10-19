@@ -7,7 +7,7 @@
           filled
           v-model="form.filename"
           label="File Name"
-          hint="file.js, file,txt etc."
+          hint="file.js, file.txt etc."
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please enter the file name.']"
         />

@@ -120,6 +120,8 @@ export default {
           message: 'It is not possible to get a detail of your Gist.',
           color: 'red'
         })
+
+        this.$router.push({ name: 'gist' })
       }
 
       this.$q.loading.hide()
@@ -223,6 +225,8 @@ export default {
         categories: []
       }
 
+      this.$store.commit('gist/config', config)
+
       try {
         let patchData = {
           description: config.description,
@@ -235,8 +239,6 @@ export default {
         }
 
         await this.$axios.patch(`/gists/${config.id}`, patchData)
-
-        this.$store.commit('gist/config', config)
 
         if (this.id) {
           // update item
