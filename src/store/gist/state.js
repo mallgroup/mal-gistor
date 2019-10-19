@@ -1,4 +1,7 @@
 export default {
   items: [],
-  config: {}
+  config: {
+    categories: [],
+    items: {}
+  }
 }

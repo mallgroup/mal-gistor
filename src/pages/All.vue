@@ -118,8 +118,8 @@ export default {
   methods: {
     async remove () {
       this.$q.dialog({
-        title: 'Delete Gits',
-        message: 'Are you sure you want to delete your Gist?',
+        title: 'Delete Gist',
+        message: 'Are you sure you want to delete selected Gists?',
         cancel: true,
         persistent: true
       }).onOk(async () => {

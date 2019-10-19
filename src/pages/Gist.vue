@@ -56,7 +56,7 @@
             />
           </div>
 
-          <div class="text-right q-mb-md">
+          <div class="q-mb-md">
             <q-btn size="sm" @click="addGistFile()">add other file</q-btn>
           </div>
         </div>
@@ -173,23 +173,38 @@ export default {
         message: 'Saving your Gist'
       })
 
+      let response = null
+
       try {
-        let response = await this.$axios[this.id ? 'patch' : 'post']('/gists' + (this.id ? `/${this.id}` : ''), {
+        response = await this.$axios[this.id ? 'patch' : 'post']('/gists' + (this.id ? `/${this.id}` : ''), {
           description: this.form.description,
           public: this.form.public,
           files: this.form.files
         })
-
-        await this.updateConfig(response.data)
       } catch (error) {
         if (error) {
           console.error(error)
         }
 
         this.$q.notify({
-          message: 'It is not possible to update a configuration gist.',
+          message: `It is not possible to ${this.id ? 'update' : 'create'} your gist.`,
           color: 'red'
         })
+      }
+
+      if (response) {
+        try {
+          await this.updateConfig(response.data)
+        } catch (error) {
+          if (error) {
+            console.error(error)
+          }
+
+          this.$q.notify({
+            message: 'It is not possible to update a configuration gist.',
+            color: 'red'
+          })
+        }
       }
 
       this.$q.loading.hide()
@@ -197,6 +212,10 @@ export default {
 
     async updateConfig (gistData) {
       let config = JSON.parse(JSON.stringify(this.$store.state.gist.config))
+
+      if (typeof config.items[gistData.id] === 'undefined') {
+        config.items[gistData.id] = {}
+      }
 
       config.items[gistData.id] = {
         id: gistData.id,
@@ -244,6 +263,9 @@ export default {
           color: 'red'
         })
       }
+
+      // redirect to gist detail
+      this.$router.push({ name: 'gist', params: { id: gistData } })
     }
   }
 }

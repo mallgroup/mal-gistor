@@ -106,6 +106,7 @@ export default {
   },
 
   mounted () {
+    this.$store.commit('gist/removeAllItems')
     this.fetchGists()
   },
 
@@ -149,9 +150,10 @@ export default {
       }
 
       if (configGistId) {
-        // get config file
+        // get content of the config file
         try {
           let response = await this.$axios.get(`/gists/${configGistId}`)
+
           this.$store.commit('gist/config', {
             id: configGistId,
             truncated: response.data.files[configFileName].truncated,
@@ -168,21 +170,35 @@ export default {
             color: 'red'
           })
         }
+      } else {
+        // create a config file first
+        try {
+          let files = {}
+          files[configFileName] = {
+            content: JSON.stringify({
+              items: [],
+              categories: []
+            })
+          }
 
-        // get all related gists from the entire batch
-        if (Object.keys(this.$store.state.gist.config.items).length) {
-          allGists = allGists.filter((gist) => {
-            /* return Object.keys(this.$store.state.gist.config.items).indexOf(gist.id) > -1 */
-            return true
+          await this.$axios.post('/gists', {
+            public: false,
+            description: configFileName,
+            files
           })
-        } else {
-          allGists = []
+        } catch (error) {
+          if (error) {
+            console.error(error)
+          }
         }
       }
 
       if (allGists.length) {
         for (let gist of allGists) {
-          this.$store.commit('gist/add', gist)
+          // ignore configuration file
+          if (gist.description !== configFileName) {
+            this.$store.commit('gist/add', gist)
+          }
         }
       }
 

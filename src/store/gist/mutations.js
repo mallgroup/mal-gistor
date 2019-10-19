@@ -25,6 +25,10 @@ export function remove (state, gist) {
   state.items = items
 }
 
+export function removeAllItems (state) {
+  state.items = []
+}
+
 export function clear (state) {
   state.items = []
   state.config = {}
