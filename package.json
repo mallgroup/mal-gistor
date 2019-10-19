@@ -15,12 +15,8 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.19.0",
-    "brace": "^0.11.1",
-    "gh-pages": "^2.1.1",
-    "highlight.js": "^9.15.10",
     "moment": "^2.24.0",
-    "quasar": "^1.0.0",
-    "vscode-icons-js": "^9.3.0"
+    "quasar": "^1.0.0"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0",
@@ -28,7 +24,8 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.10.0",
     "eslint-loader": "^2.1.1",
-    "eslint-plugin-vue": "^5.0.0"
+    "eslint-plugin-vue": "^5.0.0",
+    "gh-pages": "^2.1.1"
   },
   "engines": {
     "node": ">= 8.9.0",

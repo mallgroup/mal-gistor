@@ -28,9 +28,6 @@
 </template>
 
 <script>
-import * as ace from 'brace'
-// import 'brace/mode/javascript'
-
 export default {
   name: 'ComponentGistFile',
   props: {
@@ -49,6 +46,8 @@ export default {
   data () {
     return {
       editor: null,
+      modelist: null,
+      modes: [],
       form: {
         filename: '',
         content: ''
@@ -56,7 +55,21 @@ export default {
     }
   },
 
+  watch: {
+    'form.filename' (file) {
+      const mode = this.modelist.getModeForPath(file).mode
+
+      if (this.modes.indexOf(mode) === -1) {
+        this.modes.push(mode)
+      }
+
+      this.editor.session.setMode(mode)
+    }
+  },
+
   created () {
+    this.modelist = window.ace.require('ace/ext/modelist')
+
     if (this.filename && this.content) {
       this.form.content = this.content
       this.form.filename = this.filename
@@ -64,8 +77,7 @@ export default {
   },
 
   mounted () {
-    this.editor = ace.edit(this.$refs.highlight)
-    // this.editor.getSession().setMode('ace/mode/javascript')
+    this.editor = window.ace.edit(this.$refs.highlight)
 
     this.editor.session.on('change', (delta) => {
       this.$emit('update', { type: 'content', id: this.id, value: this.editor.getValue() })
@@ -77,6 +89,7 @@ export default {
     this.editor.container.remove()
 
     this.editor = null
+    this.modelist = null
   }
 }
 </script>
