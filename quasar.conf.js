@@ -56,7 +56,8 @@ module.exports = function (ctx) {
         'QBanner',
         'QList',
         'QItem',
-        'QTooltip'
+        'QTooltip',
+        'QKnob'
       ],
       directives: [],
 

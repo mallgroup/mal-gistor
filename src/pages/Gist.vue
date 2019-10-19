@@ -37,6 +37,7 @@
         <div class="col">
           <q-input
             filled
+            autofocus
             v-model="form.description"
             label="Description *"
             lazy-rules
@@ -221,6 +222,8 @@ export default {
         id: gistData.id,
         categories: []
       }
+
+      console.log(this.$store.state.gist.config)
 
       try {
         let patchData = {

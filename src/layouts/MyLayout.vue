@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          MALL Group Gist
+           Gist UI
         </q-toolbar-title>
 
         <a
@@ -171,21 +171,38 @@ export default {
           })
         }
       } else {
-        // create a config file first
+        // create a config file first and sync all
         try {
           let files = {}
-          files[configFileName] = {
-            content: JSON.stringify({
-              items: [],
+          let items = []
+          let categories = []
+
+          for (let gist of allGists) {
+            items.push({
+              id: gist.id,
               categories: []
             })
           }
 
-          await this.$axios.post('/gists', {
+          files[configFileName] = {
+            content: JSON.stringify({
+              items,
+              categories
+            })
+          }
+
+          let response = await this.$axios.post('/gists', {
             public: false,
             description: configFileName,
             files
           })
+
+          let config = JSON.parse(JSON.stringify(this.$store.state.gist.config))
+          config.truncated = response.data.files[configFileName].truncated
+          config.size = response.data.files[configFileName].size
+          config.items = items
+
+          this.$store.commit('gist/config', config)
         } catch (error) {
           if (error) {
             console.error(error)
