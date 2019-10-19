@@ -223,8 +223,6 @@ export default {
         categories: []
       }
 
-      console.log(this.$store.state.gist.config)
-
       try {
         let patchData = {
           description: config.description,
