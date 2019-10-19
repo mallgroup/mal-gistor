@@ -2,7 +2,9 @@
  />
 
 # Mall Gist
-Powerful UI for your Gists on GitHub.
+Powerful UI for your Gists stored at GitHub.
+
+App available on: https://igist.app
 
 ---
 
