@@ -1,0 +1,4 @@
+{
+  "name": "mal-gist",
+  "builds": [{ "src": "/dist/spa/*.*", "use": "@now/static" }]
+}

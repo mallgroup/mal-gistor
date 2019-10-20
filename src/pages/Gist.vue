@@ -87,11 +87,15 @@ export default {
         files: {},
         public: true
       },
-      fileVisible: false,
       gistFiles: {}
     }
   },
   async created () {
+    this.form.description = ''
+    this.form.files = {}
+    this.form.public = true
+    this.gistFiles = []
+
     if (this.id) {
       this.$q.loading.show({
         message: 'Gathering Gist detail'
