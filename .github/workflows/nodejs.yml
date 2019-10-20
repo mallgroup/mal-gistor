@@ -5,34 +5,22 @@ jobs:
   filteroutmaster:
     name: Filter out master branch
     runs-on: ubuntu-latest
-    needs: [deploy]
     steps:
       - name: Filter out master branch
         uses: actions/bin/filter@master
         with:
           args: "branch master"
 
-  publish:
-    name: Publish to prod
-    runs-on: ubuntu-latest
-    needs: [filteroutmaster]
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v1
-      - name: Deploy on Zeit - Prod
-        uses: actions/zeit-now@master
-        env:
-          ZEIT_TOKEN: ${{ secrets.ZEIT_TOKEN }}
-        with:
-          args: --prod
+  build:
+    - needs: [filteroutmaster]
+    - name: Checkout the repository
+      uses: actions/checkout@v1
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v1
-      - name: Deploy on Zeit
-        uses: actions/zeit-now@master
-        env:
-          ZEIT_TOKEN: ${{ secrets.ZEIT_TOKEN }}
+    - name: Build app
+    - uses: actions/setup-node@v1
+      with:
+        node-version: "10.x"
+    - run: yarn add -g @quasar/cli
+    - run: yarn install
+    - run: yarn test
+    - run: yarn run production

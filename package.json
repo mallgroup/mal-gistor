@@ -10,8 +10,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0",
-    "deploy": "quasar build && cp CNAME dist/spa/ && gh-pages -d dist/spa",
-    "now": "quasar build && cd dist/spa && ../../node_modules/.bin/now"
+    "deploy": "quasar build && cd dist/spa && ../../node_modules/.bin/now"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
