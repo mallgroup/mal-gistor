@@ -1,5 +1,8 @@
 <template>
   <q-page class="q-pa-md">
+    <h2 class="text-h4" v-if="categoryId && categoryName(categoryId)">
+      Gists listed in:
+    </h2>
     <q-table
       :data="gists"
       :columns="columns"
@@ -80,6 +83,7 @@ export default {
       pagination: {
         rowsPerPage: 100
       },
+      gists: [],
       selected: [],
       filter: '',
       columns: [
@@ -117,11 +121,30 @@ export default {
     }
   },
   computed: {
-    gists () {
+    gistsInStore () {
       return this.$store.getters['gist/filterGistsByCategory'](this.categoryId)
     }
   },
+  watch: {
+    // I can't use Vuex and computed property.
+    // Quasar Table mutates the object and Vuex complains about it.
+    // So I'm using this watch and fetchData method every time I'm manipulating with the store on this page.
+    gistsInStore: {
+      immediate: true,
+      handler () {
+        this.fetchData()
+      }
+    }
+  },
   methods: {
+    fetchData () {
+      this.gists = Object.values(this.$store.getters['gist/filterGistsByCategory'](this.categoryId))
+    },
+
+    categoryName (catId) {
+      return this.$store.getters['gist/findConfigCategoryById'](catId)
+    },
+
     async remove () {
       this.$q.dialog({
         title: 'Delete Gist',
@@ -132,7 +155,7 @@ export default {
         for (let gist of this.selected) {
           try {
             await this.$axios.delete(`gists/${gist.id}`)
-            await this.removeFromConfig(gist)
+            this.$store.dispatch('gist/remove', gist)
           } catch (error) {
             if (error) {
               console.error(error)
@@ -144,45 +167,15 @@ export default {
             })
           }
         }
+
+        this.fetchData()
+
+        this.selected = []
       }).onCancel(() => {
         // nothing here
       }).onDismiss(() => {
         // nothing here
       })
-    },
-
-    async removeFromConfig (gist) {
-      for (let gist of this.selected) {
-        try {
-          this.$store.commit('gist/remove', gist)
-
-          // remove gist from configuration file
-          let configuration = JSON.parse(JSON.stringify(this.$store.state.gist.config))
-
-          let configItems = {}
-
-          for (let configItemKey in configuration.items) {
-            if (configuration.items[configItemKey].id !== gist.id) {
-              configItems[configuration.items[configItemKey].id] = configuration.items[configItemKey]
-            }
-          }
-
-          configuration.items = configItems
-
-          await this.$store.dispatch('gist/updateConfig', configuration)
-        } catch (error) {
-          if (error) {
-            console.error(error)
-          }
-
-          this.$q.notify({
-            message: 'It is not possible to update a configuration gist.',
-            color: 'red'
-          })
-        }
-      }
-
-      this.selected = []
     }
   }
 }

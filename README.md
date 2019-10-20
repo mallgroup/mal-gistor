@@ -4,7 +4,7 @@
 # Gist UI
 Powerful UI for your Gists stored at GitHub.
 
-App available on https://igist.app
+App available on https://gistlike.pro
 
 ## What does Gist UI offer?
  - Saving more of your time by managing Gists efficiently.

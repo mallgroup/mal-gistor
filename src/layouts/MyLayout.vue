@@ -47,6 +47,8 @@
           </q-item-section>
         </q-item>
 
+        <pre>{{ categories }}</pre>
+
         <template v-if="loggedIn">
           <q-item
             v-for="category in categories" :key="category.id"
@@ -132,7 +134,7 @@ export default {
     },
 
     categories () {
-      return this.$store.state.gist.config.categories || []
+      return this.$store.state.gist.categories || []
     }
   },
 
@@ -184,11 +186,18 @@ export default {
         try {
           let response = await this.$axios.get(`/gists/${configGistId}`)
 
-          this.$store.commit('gist/config', {
-            id: configGistId,
-            ...JSON.parse(response.data.files[CONFIG_FILE_NAME].content) // append config from content
-          })
+          let configuration = JSON.parse(response.data.files[CONFIG_FILE_NAME].content)
 
+          for (let gist of allGists) {
+            if (typeof configuration.items[gist.id] !== 'undefined') {
+              configuration.items[gist.id].files = gist.files
+              configuration.items[gist.id].description = gist.description
+            }
+          }
+
+          this.$store.commit('gist/configId', configGistId)
+          this.$store.commit('gist/items', configuration.items)
+          this.$store.commit('gist/categories', configuration.categories)
           this.$store.commit('gist/size', response.data.files[CONFIG_FILE_NAME].size)
           this.$store.commit('gist/truncated', response.data.files[CONFIG_FILE_NAME].truncated)
         } catch (error) {
@@ -205,14 +214,14 @@ export default {
         // create a config file first and sync all
         try {
           let files = {}
-          let items = []
+          let items = {}
           let categories = []
 
           for (let gist of allGists) {
-            items.push({
+            items[gist.id] = {
               id: gist.id,
               categories: []
-            })
+            }
           }
 
           files[CONFIG_FILE_NAME] = {
@@ -228,11 +237,17 @@ export default {
             files
           })
 
-          let config = JSON.parse(JSON.stringify(this.$store.state.gist.config))
-          config.id = response.data.id
-          config.items = items
+          configGistId = response.data.id
 
-          await this.$store.dispatch('gist/updateConfig', config)
+          for (let gist of allGists) {
+            if (typeof items[gist.id] !== 'undefined') {
+              items[gist.id].files = gist.files
+              items[gist.id].description = gist.description
+            }
+          }
+
+          this.$store.commit('gist/items', items)
+          this.$store.commit('gist/categories', categories)
 
           this.$store.commit('gist/size', response.data.files[CONFIG_FILE_NAME].size)
           this.$store.commit('gist/truncated', response.data.files[CONFIG_FILE_NAME].truncated)
@@ -243,14 +258,7 @@ export default {
         }
       }
 
-      if (allGists.length) {
-        for (let gist of allGists) {
-          // ignore configuration file
-          if (gist.description !== CONFIG_FILE_NAME) {
-            this.$store.commit('gist/add', gist)
-          }
-        }
-      }
+      this.$store.commit('gist/configId', configGistId)
 
       this.$q.loading.hide()
     },
@@ -286,13 +294,15 @@ export default {
           return false
         }
 
-        let config = JSON.parse(JSON.stringify(this.$store.state.gist.config))
-        config.categories.push({
+        let categories = JSON.parse(JSON.stringify(this.$store.state.gist.categories))
+        categories.push({
           id: this.$uuid(),
           category
         })
 
-        await this.$store.dispatch('gist/updateConfig', config)
+        await this.$store.dispatch('gist/updateConfig', {
+          categories: categories
+        })
       }).onCancel(() => {
         // do nothing here
       }).onDismiss(() => {

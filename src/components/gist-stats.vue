@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-banner class="bg-primary text-white q-mt-md q-mb-md" v-if="gistsByLanguage.length === 0">
+    <q-banner class="bg-primary text-white q-mt-md q-mb-md" v-if="gistCount === 0">
       Currently you don't have any Gist we can count some stats from.
       <template v-slot:action>
         <q-btn flat color="white" label="create a first one" @click="$router.push({ name: 'gist' })" />
@@ -41,7 +41,7 @@
               <small>
                 <q-icon name="info" />
                 <em>
-                  <a :href="`https://gist.github.com/${$store.state.gist.config.id}`" target="_blank">Configuration file</a> might only have 1Mb.
+                  <a :href="`https://gist.github.com/${$store.state.gist.configId}`" target="_blank">Configuration file</a> might only have 1Mb.
                 </em>
               </small>
             </div>

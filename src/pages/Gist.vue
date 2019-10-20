@@ -36,6 +36,19 @@
 
       <div class="row q-gutter-md">
         <div class="col">
+          <q-input
+            filled
+            autofocus
+            v-model="form.description"
+            label="Description *"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Please enter the Gist description.']"
+          />
+        </div>
+      </div>
+
+      <div class="row q-gutter-md">
+        <div class="col">
           <q-select
             v-model="form.categories"
             :options="filteredCategories"
@@ -59,18 +72,6 @@
         </div>
       </div>
 
-      <div class="row q-gutter-md">
-        <div class="col">
-          <q-input
-            filled
-            autofocus
-            v-model="form.description"
-            label="Description *"
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please enter the Gist description.']"
-          />
-        </div>
-      </div>
       <div class="row q-gutter-md">
         <div class="col">
           <div v-for="gistFileId in Object.keys(gistFiles)" :key="gistFileId">
@@ -121,7 +122,7 @@ export default {
 
   computed: {
     categories () {
-      return this.$store.state.gist.config.categories
+      return this.$store.state.gist.categories
     },
     filteredCategories () {
       return this.categories.map((category) => {
@@ -154,14 +155,17 @@ export default {
         this.form.public = gist.public
 
         let selectedCategories = []
-        for (let categoryKey of this.$store.state.gist.config.items[this.id].categories) {
-          let foundedCategory = this.$store.getters['gist/findConfigCategoryById'](categoryKey)
 
-          if (foundedCategory) {
-            selectedCategories.push({
-              label: foundedCategory.category,
-              value: foundedCategory.id
-            })
+        if (this.$store.state.gist.items.hasOwnProperty(this.id) && this.$store.state.gist.items[this.id].categories.length) {
+          for (let categoryKey of this.$store.state.gist.items[this.id].categories) {
+            let foundedCategory = this.$store.getters['gist/findConfigCategoryById'](categoryKey)
+
+            if (foundedCategory) {
+              selectedCategories.push({
+                label: foundedCategory.category,
+                value: foundedCategory.id
+              })
+            }
           }
         }
 
@@ -282,19 +286,21 @@ export default {
     },
 
     async updateConfig (gistData) {
-      let config = JSON.parse(JSON.stringify(this.$store.state.gist.config))
+      let items = JSON.parse(JSON.stringify(this.$store.state.gist.items))
 
-      if (typeof config.items[gistData.id] === 'undefined') {
-        config.items[gistData.id] = {}
+      if (typeof items[gistData.id] === 'undefined') {
+        items[gistData.id] = {}
       }
 
-      config.items[gistData.id] = {
+      items[gistData.id] = {
         id: gistData.id,
         categories: this.form.categories.map((category) => category.value) // just the value of the select box
       }
 
       try {
-        await this.$store.dispatch('gist/updateConfig', config)
+        await this.$store.dispatch('gist/updateConfig', {
+          items
+        })
 
         if (this.id) {
           // update item

@@ -1,8 +1,16 @@
 import { httpClient, CONFIG_FILE_NAME } from '../../boot/axios'
 
-export async function updateConfig ({ commit, getters }, config) {
-  commit('config', config) // update state
+export async function remove ({ state, dispatch }, gist) {
+  Object.keys(state.items).forEach(itemKey => {
+    if (state.items[itemKey].id === gist.id) {
+      delete state.items[itemKey]
+    }
+  })
 
+  dispatch('updateConfig')
+}
+
+export async function updateConfig ({ state, commit, getters }) {
   const client = httpClient(this)
 
   // build configuration file
@@ -14,7 +22,9 @@ export async function updateConfig ({ commit, getters }, config) {
 
   try {
     // patch configuration file
-    await client.patch(`gists/${config.id}`, {
+    await client.patch(`gists/${state.configId}`, {
+      description: CONFIG_FILE_NAME,
+      public: false,
       files
     })
 

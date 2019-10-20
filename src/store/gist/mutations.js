@@ -1,5 +1,13 @@
-export function config (state, config) {
-  state.config = config
+export function configId (state, configId) {
+  state.configId = configId
+}
+
+export function items (state, items) {
+  state.items = items
+}
+
+export function categories (state, categories) {
+  state.categories = categories
 }
 
 export function size (state, size) {
@@ -28,16 +36,13 @@ export function replace (state, gist) {
   })
 }
 
-export function remove (state, gist) {
-  let items = state.items.filter(item => item.id !== gist.id)
-  state.items = items
-}
-
 export function removeAllItems (state) {
   state.items = []
 }
 
 export function clear (state) {
-  state.items = []
-  state.config = {}
+  state.items = {}
+  state.categories = []
+  state.size = 0
+  state.truncated = false
 }

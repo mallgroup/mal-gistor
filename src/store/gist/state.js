@@ -1,9 +1,7 @@
 export default {
-  items: [],
-  config: {
-    categories: [],
-    items: {}
-  },
+  configId: '',
+  items: {},
+  categories: [],
   size: 0,
   truncated: false
 }

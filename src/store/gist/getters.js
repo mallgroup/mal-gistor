@@ -17,7 +17,9 @@ export function groupByLanguage (state) {
 
   var items = JSON.parse(JSON.stringify(state.items))
 
-  for (let item of items) {
+  Object.keys(items).forEach(itemKey => {
+    let item = items[itemKey]
+
     for (let fileKey in item.files) {
       let file = item.files[fileKey]
       if (typeof languages[file.language] === 'undefined') {
@@ -36,21 +38,34 @@ export function groupByLanguage (state) {
         }
       }
     }
-  }
+  })
 
   return Object.values(languages).sort((a, b) => (a.count < b.count ? 1 : -1))
 }
 
 export const filterGistsByCategory = state => categoryId => {
-  if (categoryId) {
-    return state.items.filter(item => {
-      return state.config.items[item.id].categories.indexOf(categoryId) > -1
-    })
+  try {
+    if (categoryId) {
+      return state.items.filter(item => {
+        return state.config.items[item.id].categories.indexOf(categoryId) > -1
+      })
+    }
+  } catch (error) {
+    if (error) {
+      // do nothing here
+    }
   }
 
-  return state.items
+  if (categoryId === '') {
+    return state.items
+  }
+
+  return []
 }
 
 export function toString (state) {
-  return JSON.stringify(state.config)
+  return JSON.stringify({
+    items: state.items,
+    categories: state.categories
+  })
 }
