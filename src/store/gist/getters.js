@@ -2,6 +2,16 @@ export function count (state) {
   return Object.keys(state.items).length
 }
 
+export const findConfigCategoryById = state => categoryId => {
+  try {
+    return state.config.categories.filter(
+      configCategory => configCategory.id === categoryId
+    )[0]
+  } catch (error) {
+    return null
+  }
+}
+
 export function groupByLanguage (state) {
   let languages = []
 

@@ -169,19 +169,7 @@ export default {
 
           configuration.items = configItems
 
-          this.$store.commit('gist/config', configuration)
-
-          let patchData = {
-            description: configuration.description,
-            files: {
-              'mallgroup-gist-config.json': {
-                content: JSON.stringify(this.$store.state.gist.config),
-                filename: 'mallgroup-gist-config.json'
-              }
-            }
-          }
-
-          await this.$axios.patch(`gists/${configuration.id}`, patchData)
+          await this.$store.dispatch('gist/updateConfig', configuration)
         } catch (error) {
           if (error) {
             console.error(error)

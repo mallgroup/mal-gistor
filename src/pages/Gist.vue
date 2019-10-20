@@ -14,6 +14,7 @@
         </div>
       </div>
     </q-banner>
+
     <div class="row q-gutter-md">
         <div class="col">
           <q-btn-toggle
@@ -30,6 +31,31 @@
               <q-tooltip>You can not change the visibility via GitHub API once configured.</q-tooltip>
             </q-icon>
           </div>
+        </div>
+      </div>
+
+      <div class="row q-gutter-md">
+        <div class="col">
+          <q-select
+            v-model="form.categories"
+            :options="filteredCategories"
+            filled
+            multiple
+            label="Categories"
+            use-chips
+            use-input
+            fill-input
+            input-debounce="0"
+            @filter="filterCategories"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  No results
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
         </div>
       </div>
 
@@ -85,15 +111,33 @@ export default {
       form: {
         description: '',
         files: {},
-        public: true
+        public: true,
+        categories: null
       },
-      gistFiles: {}
+      gistFiles: {},
+      filteredCategory: ''
     }
   },
+
+  computed: {
+    categories () {
+      return this.$store.state.gist.config.categories
+    },
+    filteredCategories () {
+      return this.categories.map((category) => {
+        return {
+          label: category.category,
+          value: category.id
+        }
+      }).filter(v => v.label.toLowerCase().indexOf(this.filteredCategory) > -1)
+    }
+  },
+
   async created () {
     this.form.description = ''
     this.form.files = {}
     this.form.public = true
+    this.form.categories = null
     this.gistFiles = []
 
     if (this.id) {
@@ -108,6 +152,20 @@ export default {
 
         this.form.description = gist.description
         this.form.public = gist.public
+
+        let selectedCategories = []
+        for (let categoryKey of this.$store.state.gist.config.items[this.id].categories) {
+          let foundedCategory = this.$store.getters['gist/findConfigCategoryById'](categoryKey)
+
+          if (foundedCategory) {
+            selectedCategories.push({
+              label: foundedCategory.category,
+              value: foundedCategory.id
+            })
+          }
+        }
+
+        this.form.categories = selectedCategories
 
         if (Object.keys(gist.files).length) {
           for (let fileKey in gist.files) {
@@ -138,6 +196,12 @@ export default {
     }
   },
   methods: {
+    filterCategories (val, update, abort) {
+      update(() => {
+        this.filteredCategory = val.toLowerCase()
+      })
+    },
+
     addGistFile (filename, content) {
       let id = ++Object.keys(this.gistFiles).length
       this.$set(this.gistFiles, id, {
@@ -226,23 +290,11 @@ export default {
 
       config.items[gistData.id] = {
         id: gistData.id,
-        categories: []
+        categories: this.form.categories.map((category) => category.value) // just the value of the select box
       }
 
-      this.$store.commit('gist/config', config)
-
       try {
-        let patchData = {
-          description: config.description,
-          files: {
-            'mallgroup-gist-config.json': {
-              content: JSON.stringify(this.$store.state.gist.config),
-              filename: 'mallgroup-gist-config.json'
-            }
-          }
-        }
-
-        await this.$axios.patch(`/gists/${config.id}`, patchData)
+        await this.$store.dispatch('gist/updateConfig', config)
 
         if (this.id) {
           // update item

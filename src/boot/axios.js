@@ -20,7 +20,7 @@ export default ({ store, Vue }) => {
   Vue.prototype.$axios = httpClient(store)
 }
 
-const CONFIG_FILE_NAME = 'mallgroup-gist-config.json'
+const CONFIG_FILE_NAME = 'mal-gist-config.json'
 
 export { httpClient }
 export { CONFIG_FILE_NAME }

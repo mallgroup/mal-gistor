@@ -232,7 +232,8 @@ export default {
           config.id = response.data.id
           config.items = items
 
-          this.$store.commit('gist/config', config)
+          await this.$store.dispatch('gist/updateConfig', config)
+
           this.$store.commit('gist/size', response.data.files[CONFIG_FILE_NAME].size)
           this.$store.commit('gist/truncated', response.data.files[CONFIG_FILE_NAME].truncated)
         } catch (error) {
