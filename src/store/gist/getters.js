@@ -30,3 +30,17 @@ export function groupByLanguage (state) {
 
   return Object.values(languages).sort((a, b) => (a.count < b.count ? 1 : -1))
 }
+
+export const filterGistsByCategory = state => categoryId => {
+  if (categoryId) {
+    return state.items.filter(item => {
+      return state.config.items[item.id].categories.indexOf(categoryId) > -1
+    })
+  }
+
+  return state.items
+}
+
+export function toString (state) {
+  return JSON.stringify(state.config)
+}

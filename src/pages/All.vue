@@ -69,6 +69,12 @@ export default {
     DateTime,
     FileSize
   },
+  props: {
+    categoryId: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
       pagination: {
@@ -112,7 +118,7 @@ export default {
   },
   computed: {
     gists () {
-      return this.$store.state.gist.items
+      return this.$store.getters['gist/filterGistsByCategory'](this.categoryId)
     }
   },
   methods: {

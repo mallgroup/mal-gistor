@@ -46,14 +46,31 @@
             <q-item-label>Home</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item v-if="loggedIn" clickable :to="{name: 'all'}" exact>
-          <q-item-section avatar>
-            <q-icon name="view_list" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>All Gists</q-item-label>
-          </q-item-section>
-        </q-item>
+
+        <template v-if="loggedIn">
+          <q-item
+            v-for="category in categories" :key="category.id"
+            :to="{name: 'all', params: { categoryId: category.id }}"
+            clickable
+            exact
+          >
+            <q-item-section avatar>
+              <q-icon name="list" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ category.category }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable :to="{name: 'all'}" exact>
+            <q-item-section avatar>
+              <q-icon name="view_list" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>All Gists</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
       </q-list>
 
       <q-list v-if="loggedIn" class="q-mt-lg">
@@ -63,6 +80,14 @@
           </q-item-section>
           <q-item-section>
             New Gist
+          </q-item-section>
+        </q-item>
+        <q-item clickable @click="newCategoryDialog">
+          <q-item-section avatar>
+            <q-icon color="accent" name="create_new_folder" />
+          </q-item-section>
+          <q-item-section>
+            New Category
           </q-item-section>
         </q-item>
       </q-list>
@@ -86,6 +111,8 @@
 </template>
 
 <script>
+import { CONFIG_FILE_NAME } from '../boot/axios'
+
 export default {
   name: 'MyLayout',
 
@@ -102,10 +129,14 @@ export default {
   computed: {
     loggedIn () {
       return this.$store.getters['user/loggedIn']
+    },
+
+    categories () {
+      return this.$store.state.gist.config.categories || []
     }
   },
 
-  mounted () {
+  async mounted () {
     this.$store.commit('gist/removeAllItems')
     this.fetchGists()
   },
@@ -116,7 +147,6 @@ export default {
         return false
       }
 
-      const configFileName = 'mallgroup-gist-config.json'
       let allGists = []
 
       try {
@@ -132,7 +162,7 @@ export default {
 
           // search for configuration gist
           for (let gist of allGists) {
-            if (Object.keys(gist.files).indexOf(configFileName) > -1) {
+            if (Object.keys(gist.files).indexOf(CONFIG_FILE_NAME) > -1) {
               configGistId = gist.id
               break
             }
@@ -156,11 +186,11 @@ export default {
 
           this.$store.commit('gist/config', {
             id: configGistId,
-            ...JSON.parse(response.data.files[configFileName].content) // append config from content
+            ...JSON.parse(response.data.files[CONFIG_FILE_NAME].content) // append config from content
           })
 
-          this.$store.commit('gist/size', response.data.files[configFileName].size)
-          this.$store.commit('gist/truncated', response.data.files[configFileName].truncated)
+          this.$store.commit('gist/size', response.data.files[CONFIG_FILE_NAME].size)
+          this.$store.commit('gist/truncated', response.data.files[CONFIG_FILE_NAME].truncated)
         } catch (error) {
           if (error) {
             console.error(error)
@@ -185,7 +215,7 @@ export default {
             })
           }
 
-          files[configFileName] = {
+          files[CONFIG_FILE_NAME] = {
             content: JSON.stringify({
               items,
               categories
@@ -194,7 +224,7 @@ export default {
 
           let response = await this.$axios.post('/gists', {
             public: false,
-            description: configFileName,
+            description: CONFIG_FILE_NAME,
             files
           })
 
@@ -203,8 +233,8 @@ export default {
           config.items = items
 
           this.$store.commit('gist/config', config)
-          this.$store.commit('gist/size', response.data.files[configFileName].size)
-          this.$store.commit('gist/truncated', response.data.files[configFileName].truncated)
+          this.$store.commit('gist/size', response.data.files[CONFIG_FILE_NAME].size)
+          this.$store.commit('gist/truncated', response.data.files[CONFIG_FILE_NAME].truncated)
         } catch (error) {
           if (error) {
             console.error(error)
@@ -215,7 +245,7 @@ export default {
       if (allGists.length) {
         for (let gist of allGists) {
           // ignore configuration file
-          if (gist.description !== configFileName) {
+          if (gist.description !== CONFIG_FILE_NAME) {
             this.$store.commit('gist/add', gist)
           }
         }
@@ -233,6 +263,40 @@ export default {
       this.$store.dispatch('user/logout')
 
       this.$router.push({ name: 'auth' })
+    },
+
+    newCategoryDialog () {
+      this.$q.dialog({
+        title: 'Category',
+        message: 'Enter the category name:',
+        prompt: {
+          model: '',
+          type: 'text'
+        },
+        cancel: true,
+        persistent: false
+      }).onOk(async category => {
+        if (!category.trim().length) {
+          this.$q.notify({
+            message: 'Please enter the name of the category.',
+            color: 'red'
+          })
+
+          return false
+        }
+
+        let config = JSON.parse(JSON.stringify(this.$store.state.gist.config))
+        config.categories.push({
+          id: this.$uuid(),
+          category
+        })
+
+        await this.$store.dispatch('gist/updateConfig', config)
+      }).onCancel(() => {
+        // do nothing here
+      }).onDismiss(() => {
+        // do nothing here
+      })
     }
   }
 }

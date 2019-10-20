@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-export default ({ store, Vue }) => {
+let httpClient = store => {
   var cfg = {
     baseURL: 'https://api.github.com',
     timeout: 5000,
-    headers: { 'Accept': ' application/vnd.github.v3+json' },
+    headers: { Accept: ' application/vnd.github.v3+json' },
     auth: {
       username: store.state.user.user || '',
       password: store.state.user.token || ''
@@ -13,5 +13,14 @@ export default ({ store, Vue }) => {
 
   let HttpClient = axios.create(cfg)
 
-  Vue.prototype.$axios = HttpClient
+  return HttpClient
 }
+
+export default ({ store, Vue }) => {
+  Vue.prototype.$axios = httpClient(store)
+}
+
+const CONFIG_FILE_NAME = 'mallgroup-gist-config.json'
+
+export { httpClient }
+export { CONFIG_FILE_NAME }

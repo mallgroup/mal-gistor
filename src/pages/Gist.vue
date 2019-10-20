@@ -58,7 +58,7 @@
           </div>
 
           <div class="q-mb-md">
-            <q-btn size="sm" @click="addGistFile()">add other file</q-btn>
+            <q-btn size="sm" @click="addGistFile()">add another file</q-btn>
           </div>
         </div>
       </div>

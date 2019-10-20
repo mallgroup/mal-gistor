@@ -8,7 +8,12 @@ const routes = [
         path: '',
         component: () => import('pages/Index.vue')
       },
-      { name: 'all', path: '/all', component: () => import('pages/All.vue') },
+      {
+        name: 'all',
+        path: '/all/:categoryId?',
+        component: () => import('pages/All.vue'),
+        props: true
+      },
       {
         name: 'gist',
         path: '/gist/:id?',
