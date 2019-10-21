@@ -10,7 +10,7 @@ export async function remove ({ state, dispatch }, gist) {
   dispatch('updateConfig')
 }
 
-export async function updateConfig ({ state, commit, getters }) {
+export async function updateConfig ({ state, getters }) {
   const client = httpClient(this)
 
   // build configuration file

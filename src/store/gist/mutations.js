@@ -1,3 +1,5 @@
+import { pick as _pick } from 'lodash'
+
 export function configId (state, configId) {
   state.configId = configId
 }
@@ -19,21 +21,22 @@ export function truncated (state, truncated) {
 }
 
 export function add (state, gist) {
-  state.items.push(gist)
-}
+  let updatedGist = _pick(gist, ['id', 'description', 'categories', 'files'])
 
-export function prepend (state, gist) {
-  state.items.unshift(gist)
+  state.items[gist.id] = updatedGist
 }
 
 export function replace (state, gist) {
-  state.items = state.items.map(item => {
-    if (item.id === gist.id) {
-      item = gist
+  let items = {}
+  Object.keys(state.items).forEach((key) => {
+    if (key === gist.id) {
+      items[key] = _pick(gist, ['id', 'description', 'categories', 'files'])
+    } else {
+      items[key] = state.items[key]
     }
-
-    return item
   })
+
+  state.items = items
 }
 
 export function removeAllItems (state) {

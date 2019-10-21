@@ -156,16 +156,22 @@ export default {
 
         let selectedCategories = []
 
-        if (this.$store.state.gist.items.hasOwnProperty(this.id) && this.$store.state.gist.items[this.id].categories.length) {
-          for (let categoryKey of this.$store.state.gist.items[this.id].categories) {
-            let foundedCategory = this.$store.getters['gist/findConfigCategoryById'](categoryKey)
+        try {
+          if (this.$store.state.gist.items.hasOwnProperty(this.id) && this.$store.state.gist.items[this.id].categories.length) {
+            for (let categoryKey of this.$store.state.gist.items[this.id].categories) {
+              let foundedCategory = this.$store.getters['gist/findConfigCategoryById'](categoryKey)
 
-            if (foundedCategory) {
-              selectedCategories.push({
-                label: foundedCategory.category,
-                value: foundedCategory.id
-              })
+              if (foundedCategory) {
+                selectedCategories.push({
+                  label: foundedCategory.category,
+                  value: foundedCategory.id
+                })
+              }
             }
+          }
+        } catch (error) {
+          if (error) {
+            // do nothing here
           }
         }
 
@@ -293,22 +299,23 @@ export default {
       }
 
       items[gistData.id] = {
-        id: gistData.id,
-        categories: this.form.categories.map((category) => category.value) // just the value of the select box
+        id: gistData.id
+      }
+
+      if (this.form.categories && this.form.categories.length) {
+        items[gistData.id].categories = this.form.categories.map((category) => category.value) // just the value of the select box
       }
 
       try {
-        await this.$store.dispatch('gist/updateConfig', {
-          items
-        })
-
         if (this.id) {
           // update item
           this.$store.commit('gist/replace', gistData)
         } else {
           // new record
-          this.$store.commit('gist/prepend', gistData)
+          this.$store.commit('gist/add', gistData)
         }
+
+        await this.$store.dispatch('gist/updateConfig')
 
         this.$q.notify({
           message: 'Gist successfully created.',

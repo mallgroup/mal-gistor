@@ -47,8 +47,6 @@
           </q-item-section>
         </q-item>
 
-        <pre>{{ categories }}</pre>
-
         <template v-if="loggedIn">
           <q-item
             v-for="category in categories" :key="category.id"
@@ -192,6 +190,8 @@ export default {
             if (typeof configuration.items[gist.id] !== 'undefined') {
               configuration.items[gist.id].files = gist.files
               configuration.items[gist.id].description = gist.description
+              configuration.items[gist.id].created_at = gist.created_at
+              configuration.items[gist.id].updated_at = gist.updated_at
             }
           }
 
@@ -243,6 +243,8 @@ export default {
             if (typeof items[gist.id] !== 'undefined') {
               items[gist.id].files = gist.files
               items[gist.id].description = gist.description
+              items[gist.id].created_at = gist.created_at
+              items[gist.id].updated_at = gist.updated_at
             }
           }
 
@@ -300,9 +302,9 @@ export default {
           category
         })
 
-        await this.$store.dispatch('gist/updateConfig', {
-          categories: categories
-        })
+        this.$store.commit('gist/categories', categories)
+
+        await this.$store.dispatch('gist/updateConfig')
       }).onCancel(() => {
         // do nothing here
       }).onDismiss(() => {

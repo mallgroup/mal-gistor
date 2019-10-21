@@ -1,3 +1,5 @@
+import { orderBy as _orderBy } from 'lodash'
+
 export function count (state) {
   return Object.keys(state.items).length
 }
@@ -46,9 +48,13 @@ export function groupByLanguage (state) {
 export const filterGistsByCategory = state => categoryId => {
   try {
     if (categoryId) {
-      return state.items.filter(item => {
-        return state.config.items[item.id].categories.indexOf(categoryId) > -1
-      })
+      return _orderBy(
+        state.items.filter(item => {
+          return state.config.items[item.id].categories.indexOf(categoryId) > -1
+        }),
+        ['created_at'],
+        ['desc']
+      )
     }
   } catch (error) {
     if (error) {
@@ -57,15 +63,27 @@ export const filterGistsByCategory = state => categoryId => {
   }
 
   if (categoryId === '') {
-    return state.items
+    return _orderBy(state.items, ['created_at'], ['desc'])
   }
 
   return []
 }
 
 export function toString (state) {
+  // filter out files
+  var items = JSON.parse(JSON.stringify(state.items))
+
+  for (let itemKey in state.items) {
+    delete items[itemKey].files // delete files
+    delete items[itemKey].__index // from Quasar table
+
+    // remove timestamps as well
+    delete items[itemKey].created_at
+    delete items[itemKey].updated_at
+  }
+
   return JSON.stringify({
-    items: state.items,
+    items,
     categories: state.categories
   })
 }
