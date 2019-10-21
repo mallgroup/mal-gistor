@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!gistLoading">
     <q-banner class="bg-primary text-white q-mt-md q-mb-md" v-if="gistCount === 0">
       Currently you don't have any Gist we can count some stats from.
       <template v-slot:action>
@@ -84,6 +84,9 @@ export default {
     },
     storageFull () {
       return Math.round(this.$store.state.gist.size / 1024) || 0
+    },
+    gistLoading () {
+      return this.$store.state.gist.loading
     }
   }
 }

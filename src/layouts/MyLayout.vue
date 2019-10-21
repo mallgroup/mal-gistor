@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-           Gist UI
+           Gistor
         </q-toolbar-title>
 
         <a
@@ -150,6 +150,8 @@ export default {
       let allGists = []
 
       try {
+        this.$store.commit('gist/loading')
+
         this.$q.loading.show({
           message: 'Gathering all gists'
         })
@@ -261,6 +263,8 @@ export default {
       }
 
       this.$store.commit('gist/configId', configGistId)
+
+      this.$store.commit('gist/loading')
 
       this.$q.loading.hide()
     },

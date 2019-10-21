@@ -3,7 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          MALL Group Gist
+          Gistor
         </q-toolbar-title>
 
         <a

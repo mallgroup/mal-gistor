@@ -3,5 +3,6 @@ export default {
   items: {},
   categories: [],
   size: 0,
-  truncated: false
+  truncated: false,
+  loading: false
 }

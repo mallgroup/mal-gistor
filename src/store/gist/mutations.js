@@ -1,5 +1,9 @@
 import { pick as _pick } from 'lodash'
 
+export function loading (state) {
+  state.loading = !state.loading
+}
+
 export function configId (state, configId) {
   state.configId = configId
 }

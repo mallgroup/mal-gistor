@@ -1,9 +1,9 @@
 {
-  "name": "mal-gist",
+  "name": "mal-gistor",
   "version": "0.0.1",
-  "description": "MALL Group Gist UI",
-  "productName": "Gist UI",
-  "cordovaId": "org.cordova.quasar.app",
+  "description": "MALL Group Gistor",
+  "productName": "Gistor",
+  "cordovaId": "org.cordova.mallgroup.gistor",
   "capacitorId": "",
   "author": "Daniel Rataj <daniel.rataj@mall.cz>",
   "private": true,
