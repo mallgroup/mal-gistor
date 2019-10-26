@@ -108,7 +108,10 @@
       <q-list v-if="loggedIn" class="absolute-bottom">
         <q-item clickable @click="logout">
           <q-item-section avatar>
-            <q-icon color="tertiary" name="exit_to_app" />
+            <q-icon v-if="!avatarUrl" color="tertiary" name="exit_to_app" />
+            <q-avatar v-if="avatarUrl">
+              <img :src="avatarUrl" alt="avatar">
+            </q-avatar>
           </q-item-section>
           <q-item-section>
             Logout
@@ -146,9 +149,11 @@ export default {
     loggedIn () {
       return this.$store.getters['user/loggedIn']
     },
-
     categories () {
       return this.$store.state.gist.categories || []
+    },
+    avatarUrl () {
+      return this.$store.state.user.avatarUrl
     }
   },
 
@@ -156,6 +161,7 @@ export default {
     this.$store.commit('gist/removeAllItems')
     this.fetchGists()
     this.fetchRateLimit()
+    this.fetchUser()
   },
 
   methods: {
@@ -167,6 +173,16 @@ export default {
         this.$store.commit('rate/limit', core.limit)
         this.$store.commit('rate/remaining', core.remaining)
         this.$store.commit('rate/reset', core.reset)
+      } catch (error) {
+        if (error) {
+          console.error(error)
+        }
+      }
+    },
+    async fetchUser () {
+      try {
+        let response = await this.$axios.get('/user')
+        this.$store.commit('user/avatarUrl', response.data.avatar_url)
       } catch (error) {
         if (error) {
           console.error(error)
