@@ -84,6 +84,10 @@ export function toString (state) {
     // remove timestamps as well
     delete items[itemKey].created_at
     delete items[itemKey].updated_at
+
+    // remove additional fields
+    delete items[itemKey].description
+    delete items[itemKey].public
   }
 
   return JSON.stringify({
