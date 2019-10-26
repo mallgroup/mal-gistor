@@ -1,0 +1,41 @@
+{
+  "name": "mal-gistor",
+  "version": "0.0.1",
+  "description": "MALL Group Gistor",
+  "productName": "Gistor",
+  "cordovaId": "org.cordova.mallgroup.gistor",
+  "capacitorId": "",
+  "author": "Daniel Rataj <daniel.rataj@mall.cz>",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext .js,.vue src",
+    "test": "echo \"No test specified\" && exit 0",
+    "deploy": "quasar build && cp ./now.json ./dist/spa && ./node_modules/.bin/now --prod ./dist/spa"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.0.0",
+    "axios": "^0.19.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "quasar": "^1.0.0",
+    "uuid": "^3.3.3",
+    "v-clipboard": "^2.2.2"
+  },
+  "devDependencies": {
+    "@quasar/app": "^1.0.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.10.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-vue": "^5.0.0",
+    "now": "^16.4.3"
+  },
+  "engines": {
+    "node": ">= 8.9.0",
+    "npm": ">= 5.6.0",
+    "yarn": ">= 1.6.0"
+  },
+  "browserslist": [
+    "last 1 version, not dead, ie >= 11"
+  ]
+}
