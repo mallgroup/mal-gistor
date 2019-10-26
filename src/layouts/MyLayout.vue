@@ -25,6 +25,7 @@
             alt="MALL Group"
             src="~assets/mallgroup.svg"
             style="max-width:150px"
+            class="vertical-middle"
           >
         </a>
       </q-toolbar>

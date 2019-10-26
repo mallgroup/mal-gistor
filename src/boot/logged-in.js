@@ -5,6 +5,10 @@ export default ({ router, store, Vue }) => {
         return next({ name: 'homepage' })
       }
     } else {
+      if (to.name === 'error.404') {
+        return next()
+      }
+
       if (to.name !== 'auth') {
         return next({ name: 'auth' })
       }

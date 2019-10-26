@@ -1,11 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-toolbar-title>
-          Gistor
-        </q-toolbar-title>
-
+    <q-page-container>
+      <router-view />
+      <div class="fixed-bottom-right q-ma-md">
         <a
             href="http://mallgroup.com"
             target="_blank"
@@ -16,13 +13,10 @@
             alt="MALL Group"
             src="~assets/mallgroup.svg"
             style="max-width:150px;"
+            class="vertical-middle"
           >
         </a>
-      </q-toolbar>
-    </q-header>
-
-    <q-page-container>
-      <router-view />
+      </div>
     </q-page-container>
   </q-layout>
 </template>
