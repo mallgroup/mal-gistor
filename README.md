@@ -2,7 +2,7 @@
  />
 
 # Gistor
-Powerful UI for your Gists stored at GitHub.
+Powerful UI for your Gist snippets stored on GitHub.
 
 App available on https://gistlike.pro
 
