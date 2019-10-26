@@ -80,33 +80,21 @@
 
               <div>
                 <q-list>
-                  <q-item clickable>
+                  <q-item clickable @click="copyLinkToGist(props.row)" v-close-popup>
+                    <q-item-section avatar>
+                      <q-icon name="file_copy" />
+                    </q-item-section>
                     <q-item-section>
-                      URL
+                      Copy Link
                     </q-item-section>
-                    <q-item-section side>
-                      <q-icon name="keyboard_arrow_right" />
+                  </q-item>
+                  <q-item clickable @click="openGistInNewWindow(props.row)" v-close-popup>
+                    <q-item-section avatar>
+                      <q-icon name="near_me" />
                     </q-item-section>
-                    <q-menu anchor="top right" self="top left">
-                      <q-list>
-                        <q-item clickable @click="copyLinkToGist(props.row)" v-close-popup>
-                          <q-item-section avatar>
-                            <q-icon name="file_copy" />
-                          </q-item-section>
-                          <q-item-section>
-                            Copy Link
-                          </q-item-section>
-                        </q-item>
-                        <q-item clickable @click="openGistInNewWindow(props.row)" v-close-popup>
-                          <q-item-section avatar>
-                            <q-icon name="near_me" />
-                          </q-item-section>
-                          <q-item-section>
-                            Open on GitHub
-                          </q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-menu>
+                    <q-item-section>
+                      Open on GitHub
+                    </q-item-section>
                   </q-item>
                 </q-list>
               </div>
