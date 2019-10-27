@@ -2,7 +2,7 @@
   <q-page class="q-pa-md">
     <div class="row q-mb-md">
       <div class="col">
-        <h2 class="text-h4">
+        <h2 class="text-h4 q-mt-none">
           Gists listed in:
           <template v-if="categoryId && categoryName(categoryId)">
             {{ categoryName(categoryId).category }}
