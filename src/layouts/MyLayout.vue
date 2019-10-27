@@ -47,10 +47,40 @@
             <q-item-label>Home</q-item-label>
           </q-item-section>
         </q-item>
+      </q-list>
 
+      <q-list v-if="loggedIn" class="q-mt-lg">
+        <q-item clickable :to="{name: 'gist'}" exact>
+          <q-item-section avatar>
+            <q-icon color="secondary" name="add_circle" />
+          </q-item-section>
+          <q-item-section>
+            New Gist
+          </q-item-section>
+        </q-item>
+        <q-item clickable @click="categoryDialog({ mode: 'create' })">
+          <q-item-section avatar>
+            <q-icon color="accent" name="create_new_folder" />
+          </q-item-section>
+          <q-item-section>
+            New Category
+          </q-item-section>
+        </q-item>
+      </q-list>
+
+      <q-list dense class="categories">
+        <q-item-label header>Categories</q-item-label>
         <template
           v-if="loggedIn"
         >
+          <q-item clickable :to="{name: 'all'}" exact>
+            <q-item-section avatar>
+              <q-icon name="view_list" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>All Gists</q-item-label>
+            </q-item-section>
+          </q-item>
           <q-item
             v-for="category in categories" :key="category.id"
             :to="{name: 'all', params: { categoryId: category.id }}"
@@ -74,35 +104,7 @@
               <q-icon name="edit" />
             </q-item-section>
           </q-item>
-
-          <q-item clickable :to="{name: 'all'}" exact>
-            <q-item-section avatar>
-              <q-icon name="view_list" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>All Gists</q-item-label>
-            </q-item-section>
-          </q-item>
         </template>
-      </q-list>
-
-      <q-list v-if="loggedIn" class="q-mt-lg">
-        <q-item clickable :to="{name: 'gist'}" exact>
-          <q-item-section avatar>
-            <q-icon color="secondary" name="add_circle" />
-          </q-item-section>
-          <q-item-section>
-            New Gist
-          </q-item-section>
-        </q-item>
-        <q-item clickable @click="categoryDialog({ mode: 'create' })">
-          <q-item-section avatar>
-            <q-icon color="accent" name="create_new_folder" />
-          </q-item-section>
-          <q-item-section>
-            New Category
-          </q-item-section>
-        </q-item>
       </q-list>
 
       <q-list v-if="loggedIn" class="absolute-bottom">
@@ -414,3 +416,9 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+  .categories
+    max-height 500px
+    overflow-y auto
+</style>

@@ -10,6 +10,7 @@ App available on https://gistlike.pro
  - Saving more of your time by managing Gists efficiently.
  - Syntax highlighting with support for multiple formats.
  - Organize your snippets into categories.
+ - Search in your snippets.
  - Statistics regarding to your Gists.
 
 We're proudly back up by the [largest e-commerce platform](http://www.mallgroup.com) in Western Europe.
