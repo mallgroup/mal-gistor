@@ -120,10 +120,14 @@
             </q-tooltip>
           </q-icon>
 
-          <div>
-            <q-badge v-for="categoryId in props.row.categories" :key="categoryId" class="q-mr-sm" color="grey">
-              {{ categoryName(categoryId).category }}
-            </q-badge>
+          <div class="q-mt-sm">
+            <div v-for="categoryId in props.row.categories" :key="categoryId">
+              <router-link :to="{name: `all`, params: {categoryId}}" class="no-link">
+                <q-badge class="on-left cursor-pointer float-left" color="grey">
+                  {{ categoryName(categoryId).category }}
+                </q-badge>
+              </router-link>
+            </div>
           </div>
         </q-td>
       </template>
