@@ -232,8 +232,8 @@ export default {
         // get content of the config file
         try {
           let response = await this.$axios.get(`/gists/${configGistId}`)
-
           let configuration = JSON.parse(response.data.files[CONFIG_FILE_NAME].content)
+          let allGistsIds = allGists.map((gist) => gist.id)
 
           for (let gist of allGists) {
             if (typeof configuration.items[gist.id] !== 'undefined') {
@@ -242,6 +242,13 @@ export default {
               configuration.items[gist.id].created_at = gist.created_at
               configuration.items[gist.id].updated_at = gist.updated_at
               configuration.items[gist.id].public = gist.public
+            }
+          }
+
+          // remove items in configuration object that does not exists on real gists
+          for (let key in configuration.items) {
+            if (allGistsIds.indexOf(key) === -1) {
+              delete configuration.items[key]
             }
           }
 

@@ -245,15 +245,27 @@ export default {
 
     addGistFile (file) {
       let id = ++Object.keys(this.gistFiles).length
-      this.$set(this.gistFiles, id, {
-        id,
-        content: file.content,
-        filename: file.filename,
-        truncated: file.truncated
-      })
 
-      if (file.truncated) {
-        this.truncatedFileExists = true
+      try {
+        this.$set(this.gistFiles, id, {
+          id,
+          content: file.content,
+          filename: file.filename,
+          truncated: file.truncated
+        })
+
+        if (file.truncated) {
+          this.truncatedFileExists = true
+        }
+      } catch (error) {
+        if (error) {
+          this.$set(this.gistFiles, id, {
+            id,
+            content: '',
+            filename: '',
+            truncated: false
+          })
+        }
       }
     },
 
