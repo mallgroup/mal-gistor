@@ -112,7 +112,7 @@
             </q-menu>
           </q-icon>
 
-          <router-link :to="{name: `gist`, params: {id: props.row.id}}">{{ props.row.description }}</router-link>
+          <router-link class="no-link" :to="{name: `gist`, params: {id: props.row.id}}">{{ props.row.description }}</router-link>
 
           <q-icon name="vpn_key" class="q-ml-sm" v-if="props.row.public === false">
             <q-tooltip>
@@ -247,7 +247,7 @@ export default {
     gistsInStore: {
       immediate: true,
       handler () {
-        this.fetchData()
+        this.$nextTick(() => this.fetchData())
       }
     }
   },
