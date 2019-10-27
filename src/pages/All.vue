@@ -23,7 +23,7 @@
       :columns="columns"
       row-key="id"
       no-data-label="You don't have any gists yet."
-      :pagination="pagination"
+      :pagination.sync="pagination"
       selection="multiple"
       :selected.sync="selected"
       :filter="filter"
@@ -48,7 +48,12 @@
         </q-td>
       </template>
       <template v-slot:body-cell-description="props">
-        <q-td key="description" :props="props" :auto-width="false" :style="{'max-width': '300px', whiteSpace: 'normal'}">
+        <q-td
+          key="description"
+          :props="props"
+          :auto-width="false"
+          :style="{'max-width': '300px', whiteSpace: 'normal'}"
+        >
           <q-icon name="settings_applications" style="font-size: 150%" class="q-mr-sm cursor-pointer">
             <q-menu
               persistent
@@ -131,11 +136,6 @@
           </div>
         </q-td>
       </template>
-      <template v-slot:body-cell-updated_at="props">
-        <q-td key="updated_at" :props="props">
-          {{ props.row.updated_at | datetime }}
-        </q-td>
-      </template>
       <template v-slot:body-cell-files="props">
         <q-td key="files" :props="props">
           <div v-for="(file, key) in props.row.files" :key="key" class="row q-mb-sm">
@@ -176,7 +176,7 @@ export default {
     return {
       gistUrl: 'https://gist.github.com/',
       pagination: {
-        rowsPerPage: 100
+        rowsPerPage: null
       },
       gists: [],
       selected: [],
@@ -187,7 +187,8 @@ export default {
           field: 'description',
           label: 'Description',
           required: true,
-          align: 'left'
+          align: 'left',
+          sortable: true
         },
         {
           name: 'files',
