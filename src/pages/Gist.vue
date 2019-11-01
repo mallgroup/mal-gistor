@@ -155,7 +155,11 @@ export default {
     $route () {
       this.resetData()
 
-      this.$nextTick(() => this.addGistFile())
+      if (this.id) {
+        this.fetchData()
+      } else {
+        this.$nextTick(() => this.addGistFile())
+      }
     },
 
     gistItems: {
@@ -345,6 +349,16 @@ export default {
       }
 
       this.$q.loading.hide()
+
+      if (!this.id) {
+        // redirect to the detail in case of new record
+        this.$router.push({
+          name: 'gist',
+          params: {
+            id: response.data.id
+          }
+        })
+      }
     },
 
     async updateConfig (gistData) {
