@@ -96,7 +96,7 @@
               <q-item-label>{{ category.category }}</q-item-label>
             </q-item-section>
 
-            <q-item-section side v-show="editOption[category.id] === false">
+            <q-item-section side v-show="editOption[category.id] === undefined || editOption[category.id] === false">
               {{ totalByCategory(category) }}
             </q-item-section>
 
