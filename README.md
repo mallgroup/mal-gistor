@@ -30,4 +30,4 @@ You also might be interested in local development. We'll appreciate any code tha
 This project is licensed under the **[MIT license](http://opensource.org/licenses/mit-license.php)** - see the [LICENSE.md](/LICENSE.md) file for details.
 
 ## Tested with
-<img src="/src/statics/Browserstack-logo@2x.png" alt="BrowserStack" width="150" />
+[<img src="/src/statics/Browserstack-logo@2x.png" alt="BrowserStack" width="150" />](https://www.browserstack.com/)
