@@ -1,5 +1,4 @@
-<img src="/src/statics/icons/favicon-128x128.png" alt="logo" width="128" height="128" align="right"
- />
+<img src="/src/statics/icons/favicon-128x128.png" alt="logo" width="128" height="128" align="right" />
 
 # Gistor
 Powerful UI for your Gist snippets stored on GitHub.
@@ -29,3 +28,6 @@ You also might be interested in local development. We'll appreciate any code tha
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 This project is licensed under the **[MIT license](http://opensource.org/licenses/mit-license.php)** - see the [LICENSE.md](/LICENSE.md) file for details.
+
+## Tested with
+<img src="/src/statics/Browserstack-logo@2x.png" alt="logo" width="128" height="128" />
