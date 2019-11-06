@@ -31,3 +31,5 @@ This project is licensed under the **[MIT license](http://opensource.org/license
 
 ## Tested with
 [<img src="/src/statics/Browserstack-logo@2x.png" alt="BrowserStack" width="150" />](https://www.browserstack.com/)
+
+BrowserStack is the easiest way how do we test our flows in Gistor.
